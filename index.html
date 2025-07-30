@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🍽️ AI Restaurant Weekly Menu</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff8f0;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    header {
+      background-color: #8B0000;
+      color: white;
+      padding: 30px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 3rem;
+    }
+
+    .button-bar {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 50px;
+      background-color: #e63946;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d62828;
+    }
+
+    .day {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-left: 10px solid #8B0000;
+    }
+
+    .day h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #8B0000;
+    }
+
+    .combo {
+      background-color: #fdf1f0;
+      margin: 15px 0;
+      padding: 15px 20px;
+      border-radius: 10px;
+      border-left: 5px solid #e63946;
+      font-size: 16px;
+    }
+
+    .combo b {
+      font-weight: bold;
+      color: #222;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      margin-top: 60px;
+      background-color: #8B0000;
+      color: white;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🍽️ AI Restaurant Weekly Menu</h1>
+    <p style="font-size: 18px; margin-top: 10px;">Curated with care for your perfect week</p>
+  </header>
+
+  <div class="button-bar">
+    <button onclick="generateCombos()">🎮 Refresh Menu</button>
+  </div>
+
+  <div id="menuOutput"></div>
+
+  <footer>
+    Made with ❤️ using AI | Your Gourmet Week Awaits!
+  </footer>
+
+  <script>
+    const items = [
+      { item_name: "Paneer Butter Masala", category: "main", calories: 450, taste_profile: "spicy", popularity_score: 0.9 },
+      { item_name: "Chicken Biryani", category: "main", calories: 600, taste_profile: "spicy", popularity_score: 0.95 },
+      { item_name: "Vegetable Pulao", category: "main", calories: 400, taste_profile: "savory", popularity_score: 0.7 },
+      { item_name: "Rajma Chawal", category: "main", calories: 500, taste_profile: "savory", popularity_score: 0.8 },
+      { item_name: "Chole Bhature", category: "main", calories: 650, taste_profile: "spicy", popularity_score: 0.85 },
+      { item_name: "Masala Dosa", category: "main", calories: 480, taste_profile: "savory", popularity_score: 0.88 },
+      { item_name: "Grilled Sandwich", category: "main", calories: 370, taste_profile: "savory", popularity_score: 0.6 },
+      { item_name: "Kadhi Chawal", category: "main", calories: 490, taste_profile: "savory", popularity_score: 0.76 },
+      { item_name: "Aloo Paratha", category: "main", calories: 550, taste_profile: "savory", popularity_score: 0.82 },
+      { item_name: "Garlic Naan", category: "side", calories: 200, taste_profile: "savory", popularity_score: 0.9 },
+      { item_name: "Mixed Veg Salad", category: "side", calories: 150, taste_profile: "sweet", popularity_score: 0.75 },
+      { item_name: "French Fries", category: "side", calories: 350, taste_profile: "savory", popularity_score: 0.8 },
+      { item_name: "Curd Rice", category: "side", calories: 250, taste_profile: "savory", popularity_score: 0.7 },
+      { item_name: "Papad", category: "side", calories: 100, taste_profile: "savory", popularity_score: 0.65 },
+      { item_name: "Paneer Tikka", category: "side", calories: 300, taste_profile: "spicy", popularity_score: 0.85 },
+      { item_name: "Spring Rolls", category: "side", calories: 280, taste_profile: "spicy", popularity_score: 0.74 },
+      { item_name: "Corn Chaat", category: "side", calories: 220, taste_profile: "savory", popularity_score: 0.72 },
+      { item_name: "Fruit Bowl", category: "side", calories: 180, taste_profile: "sweet", popularity_score: 0.7 },
+      { item_name: "Masala Chaas", category: "drink", calories: 100, taste_profile: "spicy", popularity_score: 0.8 },
+      { item_name: "Sweet Lassi", category: "drink", calories: 220, taste_profile: "sweet", popularity_score: 0.9 },
+      { item_name: "Lemon Soda", category: "drink", calories: 90, taste_profile: "savory", popularity_score: 0.7 },
+      { item_name: "Cold Coffee", category: "drink", calories: 180, taste_profile: "sweet", popularity_score: 0.75 },
+      { item_name: "Coconut Water", category: "drink", calories: 60, taste_profile: "sweet", popularity_score: 0.6 },
+      { item_name: "Iced Tea", category: "drink", calories: 120, taste_profile: "sweet", popularity_score: 0.78 },
+      { item_name: "Peach Iced Tea", category: "drink", calories: 110, taste_profile: "sweet", popularity_score: 0.77 },
+      { item_name: "Mint Mojito", category: "drink", calories: 100, taste_profile: "sweet", popularity_score: 0.79 }
+    ];
+
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    function shuffle(arr) {
+      return [...arr].sort(() => 0.5 - Math.random());
+    }
+
+    function generateCombos() {
+      const outputDiv = document.getElementById("menuOutput");
+      outputDiv.innerHTML = "";
+
+      days.forEach(day => {
+        let combosHTML = `<div class="day"><h2>${day}</h2>`;
+        let comboCount = 0;
+        let tries = 0;
+        let usedItems = new Set();
+
+        while (comboCount < 3 && tries < 1000) {
+          tries++;
+
+          const mains = shuffle(items.filter(i => i.category === "main" && !usedItems.has(i.item_name)));
+          const sides = shuffle(items.filter(i => i.category === "side" && !usedItems.has(i.item_name)));
+          const drinks = shuffle(items.filter(i => i.category === "drink" && !usedItems.has(i.item_name)));
+
+          if (!mains.length || !sides.length || !drinks.length) break;
+
+          const main = mains[0];
+          const side = sides[0];
+          const drink = drinks[0];
+
+          const totalCalories = main.calories + side.calories + drink.calories;
+          if (totalCalories < 550 || totalCalories > 800) continue;
+
+          const popularityScore = ((main.popularity_score + side.popularity_score + drink.popularity_score) / 3).toFixed(2);
+          const tasteSet = new Set([main.taste_profile, side.taste_profile, drink.taste_profile]);
+          const tasteProfile = Array.from(tasteSet).sort().join(", ");
+
+          usedItems.add(main.item_name);
+          usedItems.add(side.item_name);
+          usedItems.add(drink.item_name);
+
+          combosHTML += `
+            <div class="combo">
+              🥗 <b>Main:</b> ${main.item_name} <br>
+              🍟 <b>Side:</b> ${side.item_name} <br>
+              🍼 <b>Drink:</b> ${drink.item_name} <br>
+              🔥 <b>Calories:</b> ${totalCalories} kcal<br>
+              ⭐ <b>Popularity Score:</b> ${popularityScore}<br>
+              🎨 <b>Taste Profile:</b> ${tasteProfile}
+            </div>
+          `;
+
+          comboCount++;
+        }
+
+        combosHTML += `</div>`;
+        outputDiv.innerHTML += combosHTML;
+      });
+    }
+
+    generateCombos();
+  </script>
+</body>
+</html>
